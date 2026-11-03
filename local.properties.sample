@@ -1,0 +1,8 @@
+# Copy this file to "local.properties" and point it at your Android SDK.
+# Android Studio does this automatically; for Termux / CLI builds you need it.
+#
+# Termux example:
+#   sdk.dir=/data/data/com.termux/files/home/android-sdk
+# Windows example (Android Studio uses double backslashes):
+#   sdk.dir=C\:\\Users\\you\\AppData\\Local\\Android\\Sdk
+sdk.dir=/path/to/Android/Sdk

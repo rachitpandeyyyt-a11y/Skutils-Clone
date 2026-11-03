@@ -1,0 +1,69 @@
+#!/data/data/com.termux/files/usr/bin/sh
+#
+# SkUtils ko GitHub par ek hi baar me push karne ke liye (Termux script).
+#
+# Istemal:
+#   sh push-to-github.sh <github-username> <repo-name> <personal-access-token>
+#
+# Example:
+#   sh push-to-github.sh rachitpandey skutils ghp_xxxxxxxxxxxxxxxxxxxx
+#
+# Zaroorat:
+#   - Termux me:  pkg update -y && pkg install git -y
+#   - GitHub par ek KHAALI repo banaya ho (README/gitignore ke bina)
+#   - Personal Access Token (classic) jisme "repo" scope ho
+#
+set -e
+
+GH_USER="$1"
+GH_REPO="$2"
+GH_TOKEN="$3"
+
+SRC="/storage/emulated/0/app banao"
+
+if [ -z "$GH_USER" ] || [ -z "$GH_REPO" ] || [ -z "$GH_TOKEN" ]; then
+    echo "Usage: sh push-to-github.sh <github-username> <repo-name> <token>"
+    exit 1
+fi
+
+if ! command -v git >/dev/null 2>&1; then
+    echo "git nahi mila. Pehle chalao:  pkg update -y && pkg install git -y"
+    exit 1
+fi
+
+if [ ! -d "$SRC" ]; then
+    echo "Folder nahi mila: $SRC"
+    exit 1
+fi
+
+echo "==> Termux storage access"
+termux-setup-storage >/dev/null 2>&1 || true
+
+cd "$SRC"
+
+echo "==> Git repo init (agar pehle se hai to skip hoga)"
+if [ ! -d .git ]; then
+    git init
+fi
+
+git config user.name  "Rachit Pandey"
+git config user.email "rachit@example.com"
+
+echo "==> Saari files add (hidden .github bhi)"
+git add -A
+
+echo "==> Commit"
+git commit -m "SkUtils - Sketchware Companion (by Rachit Pandey)" || echo "(commit ke liye kuch naya nahi tha)"
+
+echo "==> Branch main"
+git branch -M main
+
+echo "==> Remote set"
+git remote remove origin >/dev/null 2>&1 || true
+git remote add origin "https://${GH_USER}:${GH_TOKEN}@github.com/${GH_USER}/${GH_REPO}.git"
+
+echo "==> Push"
+git push -u origin main --force
+
+echo ""
+echo "Ho gaya! Ab GitHub par repo kholo -> Actions tab -> 'Build SkUtils APK'."

@@ -1,0 +1,30 @@
+# Gradle / Android Studio
+.gradle/
+build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Local SDK path (machine specific, never commit)
+local.properties
+
+# IDE
+.idea/
+*.iml
+*.hprof
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keystores / secrets
+*.jks
+*.keystore
+keystore.properties
+
+# Push helper ke purane/backup copies
+push-to-github.sh.old
+*.old
+*.bak
+.skutils-token
